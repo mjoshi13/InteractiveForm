@@ -1,134 +1,138 @@
-/* Please feel free to leave comments on what I should improve upon. 
- * For this project I am going for some of the exceeds expectations 
- * but most of the meets expectations criterion.
- */ 
-
-
-$(":input:first").focus();
-const $otherFeild = $('#other-title');
-const $jobFeild = $("#title");
-$otherFeild.hide();
-const $optionsDiv = $("#colors-js-puns");
-$optionsDiv.hide();
-const $design = $("#design");
-const $options = $("#color option");
-const $activities = $("fieldset.activities label");
-var totalCost = 0;
-const $costDiv = $("fieldset.activities p");
-$costDiv.hide(); 
-const $creditCardDiv = $("#credit-card"); 
-const $payPalDiv = $("#payPal");
-$payPalDiv.hide();
-const $bitcoinDiv = $("#bitcoin"); 
-$bitcoinDiv.hide(); 
-const $nameInput = $("#name"); 
+const $name = $("#name");
+const $other = $("#other-title");
+const $jobRoles = $("#title");
+var JisOther = false; 
+const $jobError = $("<p style='color: red'>Please Input A Valid Job Role</p>");
+const $design = $("#design"); 
+const $colorsDiv = $("#colors-js-puns"); 
+const $colors = $("#colors-js-puns #color");
+const $SelectTheme = $("#design option")[0]; 
+const $total = $("<p>Total: $0.00</p>");
+const $Feildactivities = $(".activities"); 
+const $activities = $(".activities label");
+var totalCost = 0.00;
+const $paymentMethod = $("#payment");
+const $selectMethod = $("#payment option")[0];
+const $paypal = $("#paypal");
+const $bitcoin = $("#bitcoin");
+const $creditCard = $("#credit-card"); 
+const er = $("<p style='color: red'>The legal name format: [first last]</p>");
+const emailer = $("<p style='color:red'>Please enter a legal email</p>");
 const $email = $("#mail"); 
 const $creditCardInput = $("#cc-num");
-const $zip = $("#zip");
-const $paymentMethod = $("#payment"); 
+const ccer = $("<p style='color:red'>Please enter a legal credit card number</p>");
 const $cvv = $("#cvv");
-const $button = $("button");
-const $errorMessage = $("#error");
-console.log($errorMessage);
-$errorMessage.hide();
+const $zip = $("#zip");
+const $submitButton = $('button');
+console.log($submitButton);
 
-const $sel = $("select");
-console.log($sel);
+ccer.hide();
+ccer.insertBefore($creditCard);
+emailer.hide(); 
+emailer.insertBefore($email);
+er.hide();
+er.insertBefore($name);
+$paypal.hide(); 
+$bitcoin.hide(); 
 
-var isLegalDesign = false; 
-var isLegalActivities = false; 
-var isLegalPM = false; 
-var isLegalName=false;
-var isLegalEmail=false;
-var isLegalCCNumber=false; 
-var isLegalCVV=false;
-var isLegalZip=false;  
-var isCC=false; 
+$selectMethod.remove(); 
+
+$total.hide(); 
+
+$total.insertAfter($Feildactivities);
+$jobError.insertAfter($jobRoles);
+$jobError.hide(); 
+//selected the name feild once the form is loaded
+$name.select(); 
+//hides the other field unless otherwise specified. 
+$other.hide();
+$colorsDiv.hide();
 
 
-$design.on("change", () => {
-    $optionsDiv.show();
-    let $opt = $design.val();
-    if($opt === "heart js") {
-        $options.each(function() {
-            $(this).attr("disabled", false);
-            if($(this).text().match(/Puns/)) {
-                $(this).attr("disabled", true);
-            } 
+//checks for the other feild and tells the user of an error has been made
+$jobRoles.on("change", (e) => {
+    $jobError.hide(); 
+    $other.hide(); 
+    JisOther=false; 
+    
+    if(e.target.value === "other") {
+        $other.show(); 
+        $other.focus();
+        JisOther=true;
+        $other.on("keyup", () => {
+            if($other.val().length === 0) {
+                $jobError.text("Please Input A Valid Job Role");
+                $jobError.css("color", "red");
+                $other.css("border-color", "red");
+                $jobError.show(); 
+            } else {
+                $jobError.text("OK!");
+                $jobError.css("color", "green");
+                $other.css("border-color", "green");
+            }
         });
-        isLegalDesign=true;
-    } else if($opt === "js puns")  {
-         $options.each(function() {
-            // console.log($(this).text());
-             $(this).attr("disabled", false);
-             if($(this).text().match(/JS shirt/)) {
-              //   console.log($(this).text());
-                 $(this).attr("disabled", true);
-             } 
-         });
-         isLegalDesign=true;
-    } else {
-        $optionsDiv.hide();
-         isLegalDesign=false; 
     }
+}); 
 
-    console.log("IS LEGAL DESIGN: " + isLegalDesign);
-});
-
-
-
-$jobFeild.on("change", () => {
-    $otherFeild.hide();
-    if($jobFeild.val() === 'other') {
-        $otherFeild.show();
-    }
-});
-
-$activities.on("change", (e) => {
-    $costDiv.show(); 
-    let name = e.target.name;
-    let time = "hi";
-  
-    $activities.each(function() {
-        //it is the element
+//for the manipulation of the design features and colors. 
+$design.on("change", () => {
+    $SelectTheme.remove();
+    $colorsDiv.show(); 
+    if($design.val() === "js puns") {
+        console.log("Hello World");
+        console.log($colors);
+        let str = ' <option value="cornflowerblue">Cornflower Blue (JS Puns shirt only)</option>';
+        let s = '<option value="darkslategrey">Dark Slate Grey (JS Puns shirt only)</option>';           
+        let q = '<option value="gold">Gold (JS Puns shirt only)</option>';
         
-        let s = $(this).html() + "";   
+        $colors.html(str + s + q) ;
+    } else {
+        console.log("Mehul look up");
+        let str = '<option value="tomato">Tomato (I &#9829; JS shirt only)</option>';
+        let s = '<option value="steelblue">Steel Blue (I &#9829; JS shirt only)</option>';
+        let q = '<option value="dimgrey">Dim Grey (I &#9829; JS shirt only)</option>';
+
+        $colors.html(str + s + q);
+    }
+});
+
+//for the manipulation of the activities section
+$activities.on("change", (e)=> {
+    $total.show();
+    let name = e.target.name;
+    let time =  "some time";
+    $activities.each(function() {
+        let s = $(this).html() + "";
         if(s.match(name)) {
             if(name !== "all") {
-              time =   s.substring(s.search(/[0-9]/), s.indexOf(","));
-            }  
+                time = s.substring(s.search(/[0-9]/), s.indexOf(","));
+            }
+
             let price = parseInt(s.substring(s.indexOf("$") + 1, s.length), 10);
             if(e.target.checked) {
-                totalCost += price;     
+                totalCost += price;
             } else {
-                totalCost -= price; 
-            }  
-            //console.log($costDiv);
+                totalCost -= price;
+            }
+
             if(totalCost > 0) {
-                $costDiv.text("Total: $" + totalCost + ".00");
-                $costDiv.css("color", "black");
-                isLegalActivities=true;
-                    
+                $total.text("Total: $" + totalCost + ".00");
+                $total.css("color", "black");
             } else {
-                $costDiv.text("Before proceeding select at least one of the activities");
-                $costDiv.css("color", "red");
-                isLegalActivities=false;
+                $total.text("Before proceeding select at least one of the activities");
+                $total.css("color", "red");
                
             }
-        } 
+        }
     });
-    
-    if(name !== "all") {
 
+    if(name !== "all") {
         $activities.each(function() {
             let $elem = $(this).html();
-            
             if($elem.match(time) && !$elem.match(name)) {
                 if(e.target.checked) {
                     $(this).children().attr("disabled", true);
-                    
                     $(this).css("color", "grey");
-                    
                 } else {
                     $(this).children().attr("disabled", false);
                     $(this).css("color", "black");
@@ -136,77 +140,71 @@ $activities.on("change", (e) => {
             }
         });
     } 
-    console.log("IS LEGAL ACTIVITIES: " + isLegalActivities);
 });
-
 
 $paymentMethod.on("change", (e) => {
-    $creditCardDiv.hide(); 
-    $payPalDiv.hide(); 
-    $bitcoinDiv.hide(); 
-    if(e.target.value === "credit card") {
-        $creditCardDiv.show(); 
-        isLegalPM=true;
-        isCC=true;
-    } else if(e.target.value === "paypal") {
-        $payPalDiv.show();
-        isLegalPM=true;
-    } else if(e.target.value === "bitcoin") {
-        $bitcoinDiv.show();
-        isLegalPM=true;
+    $creditCard.hide();
+    $paypal.hide();
+    $bitcoin.hide();  
+    let value = e.target.value;
+    if(value === "credit card") {
+        $creditCard.show();
+        
+    
+    
+    } else if(value === "paypal") {
+        $paypal.show();
     } else {
-        isLegalPM=false;
+        //bitcoin
+        $bitcoin.show();
     }
 });
 
-$nameInput.on("keyup", () => {
-    $nameInput.css("border-color", "transparent");
+
+$name.on("keyup", () => {
+    $name.css("border-color", "transparent");
     let rg = /^[a-z]+\s[a-z]+$/i;
-    let name = $nameInput.val(); 
+    let name = $name.val(); 
+    er.hide();
     //validate the name 
     if(!rg.test(name)) {
-         isLegalName=false;
-        $nameInput.css("border-color", "red");
-    } else {
-         isLegalName=true;
-    }
+        $name.css("border-color", "red");
+        er.show();
+    } 
 });
 
 $email.on("keyup", () => {
-    
+    emailer.hide();
     $email.css("border-color", "transparent");
     let rg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let name = $email.val();
     if(!rg.test(name)) {
-        isLegalEmail=false; 
+        emailer.show();
         $email.css("border-color", "red");
-    } else {
-        isLegalEmail=true;
-    }
+    } 
 });
 
 $creditCardInput.on("keyup", () => {
     $creditCardInput.css("border-color", "transparent");
     let rg = /^\d{13,16}$/;
     let nums=$creditCardInput.val();  
+    ccer.hide();
     if(!rg.test(nums)) {
-        isLegalCCNumber=false; 
+        ccer.show();
         $creditCardInput.css("border-color", "red");   
-    } else {
-        isLegalCCNumber=true;
-    }
+    } 
 });
+
+
 
 $zip.on("keyup", () => {
     $zip.css("border-color", "transparent");
     let rg = /^\d{5}$/;
     let nums=$zip.val(); 
     if(!rg.test(nums)) {
-        isLegalZip=false; 
+       
         $zip.css("border-color", "red");
-    } else {
-        isLegalZip=true;
-    }
+    } 
 });
 
 $cvv.on("keyup", () => {
@@ -214,26 +212,18 @@ $cvv.on("keyup", () => {
     let rg = /^\d{3}$/;
     let nums = $cvv.val();
     if(!rg.test(nums)) {
-        isLegalCVV=false; 
         $cvv.css("border-color", "red");
-    } else {
-        isLegalCVV=true;
-    }
+    } 
 });
 
 
 
-$button.on("click", (e) => {
-    $errorMessage.show();
-    if(!isLegalDesign || !isLegalActivities || !isLegalPM || !isLegalName || !isLegalEmail) {
-        e.preventDefault(); 
-    } else if(isCC) {
-        if(!isLegalCCNumber || !isLegalCVV || !isLegalZip) {
-            e.preventDefault();
-        }
-    } else {
-        $errorMessage.hide();
+$submitButton.on("click", (e) => {
+    //get all the form feilds starting with the name
+    if(!/^[a-z]+\s[a-z]+$/i.test($name.val()) || 
+    !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test($email.val())
+    || totalCost === 0  || ($paymentMethod.val() === "credit card" && (!/^\d{13,16}$/.test($creditCardInput.val()) 
+    || !/^\d{5}$/.test($zip.val()) || !/^\d{3}$/.test($cvv.val()))) || $design.val() === "Select Theme" || ($jobRoles.val() === "other" && $other.val().length === 0)) {
+        e.preventDefault();
     }
 });
-
-

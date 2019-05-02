@@ -179,20 +179,3 @@ button:hover {
 		width: 49%;
 	}
 }
-
-
-option:disabled {
-	display:none;
-}
-
-#payPal {
-
-}
-
-#bitcoin {
-
-}
-
-.paymentInfo {
-
-}
