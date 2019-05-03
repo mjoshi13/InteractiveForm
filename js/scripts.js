@@ -1,3 +1,8 @@
+/**
+ * Creator: Mehul Joshi
+ * For this project I am aiming for all of the meets expectations and some of the exceeds expectations feilds. 
+ */
+
 const $name = $("#name");
 const $other = $("#other-title");
 const $jobRoles = $("#title");
@@ -103,18 +108,17 @@ $activities.on("change", (e)=> {
     let time =  "some time";
     $activities.each(function() {
         let s = $(this).html() + "";
+        
         if(s.match(name)) {
             if(name !== "all") {
-                time = s.substring(s.search(/[0-9]/), s.indexOf(","));
+                time = s.substring(s.indexOf("— ") + 1, s.indexOf(","));
             }
-
             let price = parseInt(s.substring(s.indexOf("$") + 1, s.length), 10);
             if(e.target.checked) {
                 totalCost += price;
             } else {
                 totalCost -= price;
             }
-
             if(totalCost > 0) {
                 $total.text("Total: $" + totalCost + ".00");
                 $total.css("color", "black");
@@ -127,7 +131,9 @@ $activities.on("change", (e)=> {
     });
 
     if(name !== "all") {
+        
         $activities.each(function() {
+
             let $elem = $(this).html();
             if($elem.match(time) && !$elem.match(name)) {
                 if(e.target.checked) {
